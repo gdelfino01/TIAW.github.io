@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Meta tags para conjunto de caracteres e viewport -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Título da página -->
+    <title>Home FluentLink</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Estilos personalizados -->
+    <link href="./styles.css" rel="stylesheet">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+    <!-- JavaScript para gerar cards a partir de dados do servidor -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Função para gerar os cards
+            function gerarCards(dados) {
+                const equipeContainer = document.getElementById('equipe');
+
+                dados.forEach(pessoa => {
+                    const cardElement = document.createElement('div');
+                    cardElement.classList.add('col-md-4', 'mb-4');
+
+                    // Adiciona uma classe com base no campo "language" para estilização personalizada
+                    const languageClass = pessoa.language ? `language-${pessoa.language}` : '';
+
+                    // Adiciona a imagem específica com base no valor do campo "language"
+                    const languageImage = pessoa.language === 'Espanhol'
+                        ? '<img class="es-flag" src="img/es-flag.png" alt="Language Flag">'
+                        : pessoa.language === 'Frances'
+                            ? '<img class="es-flag" src="img/fr-flag.png" alt="Language Flag">'
+                            : pessoa.language === 'Alemão'
+                                ? '<img class="es-flag" src="img/de-flag.png" alt="Language Flag">'
+                                : pessoa.language === 'Ingles'
+                                    ? '<img class="es-flag" src="img/us-flag.png" alt="Language Flag">'
+                                    : '';
+
+                    cardElement.innerHTML = `
+                        <div class="card h-100 ${languageClass}" style="background-color: #3E426A;">
+                            <img src="${pessoa.photo}" class="card-img-top object-fit-cover" height="150" alt="..." style="cursor: pointer;" onclick="abrirModal('${pessoa.id}', '${pessoa.tipo}')">
+                            ${languageImage}
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: #ffffff;">${pessoa.name} ${pessoa.lastName}</h5>
+                                <div style="max-height: 70px; overflow-y: auto; background-color: #3E426A;">
+                                    <p class="card-text" style="color: #ffffff;">
+                                        <strong>E-mail:</strong> ${pessoa.email}<br>
+                                        <strong>Sobre:</strong> ${pessoa.personalDescription || 'N/A'}<br>
+                                        <strong>Aulas:</strong> ${pessoa.clasroomDescription || 'N/A'}
+                                    </p>
+                                </div>
+                            </div>
+                            <a class="btn btn-primary" href="./detalheProfessor.html?id=${pessoa.id}">Ver Detalhes</a>
+                        </div>
+                    `;
+
+                    equipeContainer.appendChild(cardElement);
+                });
+            }
+
+            function abrirModal(id) {
+                const pessoa = encontrarPessoaPorId(id);
+
+                // Atualizar o conteúdo do modal com as informações da pessoa
+                document.getElementById('exampleModalLabel').innerText = `${pessoa.name} ${pessoa.lastName}`;
+                document.getElementById('perfil-image').src = pessoa.photo;
+                document.getElementById('country-image').src = pessoa.flagImage; // Certifique-se de adicionar uma propriedade flagImage ao seu JSON
+                document.getElementById('title-name').innerText = `${pessoa.name} ${pessoa.lastName}`;
+                document.getElementById('personal-description').innerText = pessoa.personalDescription || '';
+                document.getElementById('user-language').innerText = `Idioma: ${pessoa.language || 'N/A'}`;
+                document.getElementById('clasroom-description').innerText = `Aulas: ${pessoa.clasroomDescription || 'N/A'}`;
+
+                // Atualizar os links de contato
+                document.getElementById('link-discord').href = pessoa.discordLink || '';
+                document.getElementById('link-meet').href = pessoa.meetLink || '';
+                document.getElementById('link-skype').href = pessoa.skypeLink || '';
+                document.getElementById('link-teams').href = pessoa.teamsLink || '';
+
+                // Atualizar o link para o perfil de contato
+                document.getElementById('perfil-contato').href = pessoa.tipo === 'professor' ? './perfil_professor.html' : './perfil_aluno.html';
+
+                // Abra o modal
+                const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                modal.show();
+            }
+
+
+            // Função para buscar os dados do servidor JSON
+            async function obterDadosDoServidor() {
+                try {
+                    const resposta = await fetch('https://jsonserverfluentlinktiaw.gustavodelfino3.repl.co/professor');
+                    const dados = await resposta.json();
+                    gerarCards(dados);
+
+                    const searchBar = document.querySelector('input[type="search"]');
+                    searchBar.addEventListener('input', function () {
+                        const termoPesquisa = this.value.toLowerCase();
+                        const cards = document.querySelectorAll('.card');
+
+                        // Cria uma lista temporária de cards visíveis
+                        const cardsVisiveis = Array.from(cards).filter((card) => {
+                            const nomeCompleto = card.querySelector('.card-title').textContent.toLowerCase();
+                            return nomeCompleto.includes(termoPesquisa);
+                        });
+
+                        // Reposiciona os cards no contêiner
+                        cards.forEach((card, index) => {
+                            const cardVisivel = cardsVisiveis.includes(card);
+                            card.style.display = cardVisivel ? 'block' : 'none';
+                            card.style.order = cardVisivel ? -1 : index;
+                        });
+                    });
+                } catch (erro) {
+                    console.error('Erro ao obter dados do servidor:', erro);
+                }
+            }
+
+            // Chama a função para obter os dados do servidor e gerar os cards ao carregar a página
+            obterDadosDoServidor();
+        });
+    </script>
+
+
+
+    <!-- Fim do  gerador de card-->
+
+
+</head>
+
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-9">
+                    <form class="d-flex mx-auto">
+                        <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
+                    </form>
+                    <ul class="header-list">
+                        <li>
+                        <li><a href="./Homepage.html">Home</a></li>
+                        </li>
+                        <li>
+                            <p>FAQ</p>
+                        </li>
+                        <li>
+                            <p>Suporte</p>
+                        </li>
+                    </ul>
+                    <img class="brasil-icon" src="img/brasil.png">
+                    <a href="login.html" class="btn-pessoa">
+                        <img class="right-icon" src="img/pessoa.png">
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Fim Cabeçalho -->
+
+    <!-- Barra lateral (Sidebar) -->
+    <div class="container-fluid">
+        <a href="./Homepage.html">
+            <div class="logo">
+                <img src="img/logo-t.png" alt="Logo">
+            </div>
+        </a>
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky side-bar">
+                    <div class="preco">
+                        <h4>Preço</h4>
+                        <p>Filtrar por preço</p>
+                        <input type="range" min="1" max="100" class="slider">
+                        <label for="slider" class="slider-left">R$0,00</label>
+                        <label for="slider" class="slider-right">R$150,00</p>
+                    </div>
+
+
+                    <style>
+                        h4 a,
+                        ul li a {
+                            color: inherit;
+                            text-decoration: none;
+                            /*  remove sublinhado padrão */
+                        }
+                    </style>
+
+
+
+                    <h4>Idiomas</h4>
+                    <ul>
+                        <li><a href="ingles.html">Inglês</a></li>
+                        <li><a href="espanhol.html">Espanhol</a></li>
+                    </ul>
+
+
+
+                    <h4>Tipo de conteúdo</h4>
+                    <ul>
+                        <li>Conversação</li>
+                        <li>Gramática</li>
+                        <li>Vocabulário</li>
+                        <li>Outros</li>
+                    </ul>
+
+                    <h4>Tipo de Aula</h4>
+                    <ul>
+                        <li>Individuais</li>
+                        <li>Grupo</li>
+                        <li>Gravadas</li>
+                        <li>Personalizadas</li>
+                        <li>Outros</li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Fim Barra lateral (Sidebar) -->
+
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container mt-3">
+                    <!-- Destaque de Cursos -->
+
+
+
+
+                    <!-- Equipe -->
+                    <h2>Ordenar:</h2>
+
+                    <div class="row" id="equipe">
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </main>
+            <!-- End Main Content -->
+        </div>
+    </div>
+
+
+    <footer class="bg-dark text-white py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; Todos direitos reservados a FluentLink</p>
+                </div>
+                <div class="col-md-6 text-md-end footer-list">
+                    <ul>
+                        <li>
+                            <p>Endereço</p>
+                        </li>
+                        <li>
+                            <p>|</p>
+                        </li>
+                        <li>
+                            <p>Telefone</p>
+                        </li>
+                        <li>
+                            <p>|</p>
+                        </li>
+                        <li>
+                            <p>Email</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- JAVASCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+
+        </script>
+
+
+
+</body>
+
+</html>

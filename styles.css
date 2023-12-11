@@ -1,0 +1,215 @@
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+    background-color: beige;
+    overflow-x: hidden;
+}
+
+
+main {
+    flex: 1;
+    padding-top: 50px;
+    /* Ajuste conforme necessário */
+    padding-bottom: 50px;
+    /* Ajuste conforme necessário */
+    margin-left: 100px;
+}
+
+#sidebar {
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding: 20px;
+    background-color: #3E426A;
+    border-right: 1px solid #3E426A;
+    overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+    main {
+        padding-left: 240px;
+    }
+}
+
+header {
+    background-color: #2B2E4A;
+    padding: 15px 0;
+    text-align: center;
+}
+
+header .navbar-brand img {
+    max-height: 50px;
+}
+
+header form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+header form input {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 10px;
+}
+
+.header-list {
+    display: inline-block;
+    margin: auto;
+    padding: 0%;
+    position: relative;
+}
+
+.header-list li {
+    display: inline-block;
+    padding: 5px 15px 5px 15px;
+    color: #fff;
+}
+
+.course-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+}
+
+.testimonial {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px;
+}
+
+.team-member {
+    text-align: right;
+    height: 10em;
+    margin: 20px;
+    background: linear-gradient(to bottom, transparent 60%, #3E426A 40%);
+    padding: 1em;
+    border-radius: 2em;
+    position: relative;
+    overflow: hidden;
+}
+
+.professor-image {
+    height: 60%;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+.team-member p {
+    margin-top: -0.5em;
+}
+
+.team-member img {
+    max-width: 100%;
+}
+
+footer {
+    width: 100%;
+}
+
+.footer-list {
+    display: inline-block;
+    padding: 0%;
+    position: relative;
+}
+
+.footer-list li {
+    display: inline-block;
+    padding: 0.2em;
+    color: #fff;
+}
+
+h4 {
+    font-weight: bold;
+    font-size: 1.05em;
+    margin-left: -0.3em;
+}
+
+.side-bar {
+    margin-top: 3em;
+    background-color: white;
+    padding: 1.5em;
+    border-radius: 1em;
+}
+
+.side-bar li {
+    list-style-type: none;
+    margin-left: -1em;
+    margin-bottom: 0.5em;
+}
+
+.slider {
+    width: 100%;
+}
+
+.slider-left {
+    font-size: small;
+}
+
+.slider-right {
+    display: block;
+    margin-top: -1.6em;
+    font-size: small;
+    text-align: right;
+}
+
+.logo img {
+    z-index: 1;
+    position: absolute;
+    width: 10%;
+    margin-top: -5em;
+    margin-left: 2em;
+}
+
+.right-icon{
+    position: absolute;
+    margin: auto;
+    width: 10%;
+    z-index: 1;
+    margin-left: 15em;
+}
+
+.brasil-icon{
+    position: absolute;
+    margin: auto;
+    width: 5%;
+    z-index: 2;
+    margin-left: 14.5em;
+    margin-top: 4.5em;
+}
+
+.us-flag {
+    width: 30%;
+    float: left;
+    margin-top: -2.5em;
+}
+
+.es-flag {
+    width: 30%;
+    float: left;
+    margin-top: -2.5em;
+}
+
+
+.btn-pessoa {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Adicione estilos adicionais conforme necessário */
